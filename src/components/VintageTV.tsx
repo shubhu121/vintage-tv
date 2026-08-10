@@ -209,8 +209,29 @@ export const VintageTV = () => {
           </div>
         </div>
 
-        <div className="absolute -bottom-16 left-20 w-16 h-16 bg-[#2d1e14] rounded-t-lg shadow-2xl" />
-        <div className="absolute -bottom-16 right-20 w-16 h-16 bg-[#2d1e14] rounded-t-lg shadow-2xl" />
+        {/* Left Foot */}
+        <div 
+          className="absolute -bottom-10 left-[12%] w-14 h-24 z-[-1] origin-top rotate-[15deg]" 
+          style={{ filter: 'drop-shadow(15px 20px 15px rgba(0,0,0,0.8))' }}
+        >
+          <div className="w-full h-full bg-gradient-to-r from-[#0f0905] via-[#4a2e1b] to-[#0f0905] rounded-b-[24px] border-2 border-[#1a100a] relative overflow-hidden shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)]">
+            {/* Brass Cap */}
+            <div className="absolute bottom-0 left-0 w-full h-7 bg-gradient-to-r from-[#59461d] via-[#d6bb76] to-[#362910] border-t border-[#4a3a14] shadow-[inset_0_2px_6px_rgba(255,255,255,0.4)]" />
+            <div className="absolute bottom-7 left-0 w-full h-[1px] bg-black/50" />
+          </div>
+        </div>
+        
+        {/* Right Foot */}
+        <div 
+          className="absolute -bottom-10 right-[12%] w-14 h-24 z-[-1] origin-top -rotate-[15deg]" 
+          style={{ filter: 'drop-shadow(-15px 20px 15px rgba(0,0,0,0.8))' }}
+        >
+          <div className="w-full h-full bg-gradient-to-r from-[#0f0905] via-[#4a2e1b] to-[#0f0905] rounded-b-[24px] border-2 border-[#1a100a] relative overflow-hidden shadow-[inset_0_10px_20px_rgba(0,0,0,0.9)]">
+            {/* Brass Cap */}
+            <div className="absolute bottom-0 left-0 w-full h-7 bg-gradient-to-r from-[#59461d] via-[#d6bb76] to-[#362910] border-t border-[#4a3a14] shadow-[inset_0_2px_6px_rgba(255,255,255,0.4)]" />
+            <div className="absolute bottom-7 left-0 w-full h-[1px] bg-black/50" />
+          </div>
+        </div>
 
       </div>
     </div>
