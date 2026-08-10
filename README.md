@@ -17,10 +17,10 @@ A fun, interactive vintage television UI built with React. Features tactile rota
 
 1. Install dependencies:
    ```bash
-   npm install
+   bun install
    ```
 
 2. Start the development server:
    ```bash
-   npm run dev
+   bun run dev
    ```
