@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
+import React, { useState, useEffect, useRef } from 'react';
 import { CRTScreen } from './CRTScreen';
 import { RotaryKnob, ToggleSwitch } from './Controls';
-
-const Player = ReactPlayer as any;
+import { YouTubePlayer } from './YouTubePlayer';
 
 const CHANNELS = [
-  "https://archive.org/download/superman_the_mechanical_monsters/superman_the_mechanical_monsters_512kb.mp4",
-  "https://archive.org/download/popeye_the_sailor_ancient_fantasy/popeye_the_sailor_ancient_fantasy_512kb.mp4",
-  "https://archive.org/download/woody_woodpecker_pantry_panic/woody_woodpecker_pantry_panic_512kb.mp4",
-  "https://archive.org/download/bb_minnie_the_moocher/bb_minnie_the_moocher_512kb.mp4",
-  "https://archive.org/download/FLIP_FROG-FIDDLESTICKS/FLIP_FROG-FIDDLESTICKS_256k.mp4",
-  "https://archive.org/download/bb_snow_white/bb_snow_white_512kb.mp4",
-  "https://archive.org/download/mighty_mouse_wolf_wolf/mighty_mouse_wolf_wolf_512kb.mp4",
-  "https://archive.org/download/superman_electric_earthquake/superman_electric_earthquake_512kb.mp4",
-  "https://archive.org/download/noveltoon_casper_tfg_theres_good_boos_tonight/noveltoon_casper_tfg_theres_good_boos_tonight_512kb.mp4",
-  "https://archive.org/download/felix_the_cat_the_goos_that_laid_the_golden_egg/felix_the_cat_the_goos_that_laid_the_golden_egg_512kb.mp4",
-  "https://archive.org/download/gabby_alls_well/gabby_alls_well_512kb.mp4",
-  "https://archive.org/download/JackFrost_/JackFrost_512kb.mp4",
+  "4yN-xTnLQec", // 0
+  "88EN8oQTweE", // 1
+  "aBp_0TsIHvU", // 2
+  "C9yE5VsdsrY", // 3
+  "cPFJZNWyHkY", // 4
+  "DBo1QBjeeIM", // 5
+  "dOWoT5gwHkY", // 6
+  "eYJLMxlExpA", // 7
+  "K3EqIVUyfIU", // 8
+  "kxDVDM8R3vE", // 9
+  "LOPNr56YzdE", // 10
+  "tgW1WUdbgJ4", // 11
 ];
 
 export const VintageTV = () => {
@@ -26,13 +24,29 @@ export const VintageTV = () => {
   const [volume, setVolume] = useState(50);
   const [hasError, setHasError] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [playerState, setPlayerState] = useState<number>(-1);
+  const playerRef = useRef<any>(null);
 
   useEffect(() => {
     setIsReady(false);
     setHasError(false);
+    setPlayerState(-1);
+    
+    // Timeout fallback if video fails to load or start playing
+    const timeout = setTimeout(() => {
+      if (!isReady) setHasError(true);
+    }, 8000);
+
+    return () => clearTimeout(timeout);
   }, [channel]);
 
   const hasSignal = !hasError && isReady;
+
+  useEffect(() => {
+    if (isReady) {
+      setHasError(false); // clear any timeout error if we are ready
+    }
+  }, [isReady]);
 
   const getGlowColor = () => {
     if (!power) return 'transparent';
@@ -72,30 +86,25 @@ export const VintageTV = () => {
               
               {/* Video Background */}
               <div className="absolute inset-0 z-0 overflow-hidden rounded-[30px] flex items-center justify-center bg-black">
-                <Player
-                  url={CHANNELS[channel]}
+                <YouTubePlayer
+                  videoId={CHANNELS[channel]}
                   playing={power}
-                  volume={volume / 100}
+                  volume={volume}
                   muted={!power || volume === 0}
-                  width="130%"
-                  height="130%"
-                  loop={true}
-                  onReady={() => { 
-                    console.log(`Video ready for channel ${channel}`);
+                  onReady={(player: any) => { 
+                    playerRef.current = player;
                     setIsReady(true); 
                     setHasError(false); 
                   }}
-                  onError={(e: any) => {
-                    console.error(`Video error for channel ${channel}:`, e);
-                    setHasError(true);
-                  }}
-                  config={{
-                    file: {
-                      attributes: {
-                        crossOrigin: 'anonymous',
-                        style: { objectFit: 'cover', width: '100%', height: '100%' }
-                      }
+                  onStateChange={(state: number) => {
+                    setPlayerState(state);
+                    // 1 = PLAYING, 3 = BUFFERING, 5 = CUED
+                    if (state === 1 || state === 3 || state === 5) {
+                      setIsReady(true);
                     }
+                  }}
+                  onError={(e: any) => {
+                    setHasError(true);
                   }}
                 />
               </div>
@@ -131,7 +140,18 @@ export const VintageTV = () => {
               <div className="h-[100px] w-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #1a110a 0px, #1a110a 2px, transparent 2px, transparent 6px)' }} />
               
               <div className="flex justify-between items-center px-2 mt-4">
-                <ToggleSwitch checked={power} onChange={setPower} />
+                <ToggleSwitch checked={power} onChange={(val) => {
+                  setPower(val);
+                  if (playerRef.current) {
+                    if (val) {
+                      playerRef.current.unMute();
+                      playerRef.current.playVideo();
+                    } else {
+                      playerRef.current.mute();
+                      playerRef.current.pauseVideo();
+                    }
+                  }
+                }} />
                 <div className="flex gap-1.5 flex-wrap justify-end w-12">
                    <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
                    <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
