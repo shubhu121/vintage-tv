@@ -85,6 +85,7 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       rel: 0,
       showinfo: 0,
       iv_load_policy: 3,
+      cc_load_policy: 0,
       playsinline: 1,
     };
     if (origin) {
@@ -98,6 +99,8 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
     playerRef.current = new window.YT.Player(el, {
       videoId: videoId,
+      width: '100%',
+      height: '100%',
       playerVars: playerVars,
       events: {
         onReady: (event: any) => {
@@ -172,8 +175,10 @@ export const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   }, [volume, muted]);
 
   return (
-    <div className="w-[145%] max-w-none aspect-video pointer-events-none z-0 flex-shrink-0 bg-black">
-      <div ref={containerRef} className="w-full h-full" />
+    <div className="absolute inset-0 pointer-events-none z-0 bg-black flex items-center justify-center overflow-hidden">
+      <div className="w-full h-full flex-shrink-0 flex items-center justify-center pointer-events-none transform scale-[1.15]">
+        <div ref={containerRef} className="w-full h-full" />
+      </div>
     </div>
   );
 };

@@ -24,8 +24,13 @@ export const VintageTV = () => {
   const [volume, setVolume] = useState(50);
   const [hasError, setHasError] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const isReadyRef = useRef(false);
   const [playerState, setPlayerState] = useState<number>(-1);
   const playerRef = useRef<any>(null);
+
+  useEffect(() => {
+    isReadyRef.current = isReady;
+  }, [isReady]);
 
   useEffect(() => {
     setIsReady(false);
@@ -34,7 +39,7 @@ export const VintageTV = () => {
     
     // Timeout fallback if video fails to load or start playing
     const timeout = setTimeout(() => {
-      if (!isReady) setHasError(true);
+      if (!isReadyRef.current) setHasError(true);
     }, 8000);
 
     return () => clearTimeout(timeout);
@@ -69,7 +74,7 @@ export const VintageTV = () => {
         }} 
       />
 
-      <div className="relative w-[880px] h-[640px] bg-[#4a3221] rounded-[60px] p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8),inset_0_4px_10px_rgba(255,255,255,0.1)] border-b-[12px] border-[#2d1e14] border-t-[2px] border-[#5d4037]">
+      <div className="relative w-[1040px] h-[640px] bg-[#4a3221] rounded-[60px] p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8),inset_0_4px_10px_rgba(255,255,255,0.1)] border-b-[12px] border-[#2d1e14] border-t-[2px] border-[#5d4037]">
         
         <div 
           className="absolute inset-0 rounded-[60px]" 
