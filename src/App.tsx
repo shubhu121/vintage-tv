@@ -6,7 +6,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { VintageTV } from './components/VintageTV';
-import UiLib from './pages/UiLib';
 
 function Home() {
   return (
@@ -24,7 +23,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/ui-lib" element={<UiLib />} />
       </Routes>
     </BrowserRouter>
   );

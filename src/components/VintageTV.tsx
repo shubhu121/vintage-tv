@@ -179,6 +179,10 @@ export const VintageTV = () => {
               <div className="flex justify-between items-center px-2 mt-2">
                 <ToggleSwitch checked={power} onChange={(val) => {
                   setPower(val);
+                  if (val) {
+                    setVolume(40);
+                    setChannel(0);
+                  }
                   if (playerRef.current) {
                     if (val) {
                       playerRef.current.unMute();

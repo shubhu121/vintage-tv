@@ -1,40 +1,26 @@
-# Interaction Lab
+# Vintage TV x Cartoon Player
 
-A showcase of handcrafted UI micro-interactions and animated components. Built for precision, performance, and delight.
+A fun, interactive vintage television UI built with React. Features tactile rotary knobs, a retro static screen effect, and a working YouTube player designed to play classic cartoons.
 
 ## Features
-
-- **Vintage TV Component**: An interactive vintage television UI with smooth rotary knobs for channel and volume control, static effects, and a working YouTube iframe player.
-- **Micro-Interactions UI Library**:
-  - `MagneticButton`: Button with physics-based spring constraints that follows the cursor.
-  - `SpotlightCard`: Card with a subtle cursor-tracking spotlight gradient.
-  - `AnimatedTabs`: Fluid layout animation with shared layout IDs using motion.
-  - `LiquidBackground`: Animated ambient background.
-- **Custom React Hooks**:
-  - `useRotaryClick`: Provides audio haptic feedback using Web Audio API for rotary controls.
+- **Interactive Controls**: Functional rotary knobs with haptic audio feedback.
+- **Retro UI**: Vintage aesthetic with static noise transitions and glowing LED indicators.
+- **Built-in Player**: Seamlessly plays classic cartoons and videos using the YouTube iframe API.
 
 ## Technologies Used
-
 - React 18
-- Vite
-- Tailwind CSS
-- Motion (Framer Motion)
-- React Router DOM
 - TypeScript
+- Tailwind CSS
+- Motion
 
-## Getting Started
+## Running Locally
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Run the development server:
+2. Start the development server:
    ```bash
    npm run dev
-   ```
-
-3. Build for production:
-   ```bash
-   npm run build
    ```
