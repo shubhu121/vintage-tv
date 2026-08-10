@@ -28,6 +28,38 @@ export const VintageTV = () => {
   const [playerState, setPlayerState] = useState<number>(-1);
   const playerRef = useRef<any>(null);
 
+  const [channelBlink, setChannelBlink] = useState(false);
+  const [volumeBlink, setVolumeBlink] = useState(false);
+  const [internetBlink, setInternetBlink] = useState(false);
+
+  useEffect(() => {
+    if (!power) return;
+    setChannelBlink(true);
+    const t = setTimeout(() => setChannelBlink(false), 200);
+    return () => clearTimeout(t);
+  }, [channel, power]);
+
+  useEffect(() => {
+    if (!power) return;
+    setVolumeBlink(true);
+    const t = setTimeout(() => setVolumeBlink(false), 200);
+    return () => clearTimeout(t);
+  }, [volume, power]);
+
+  useEffect(() => {
+    if (!power) {
+      setInternetBlink(false);
+      return;
+    }
+    let timeout: ReturnType<typeof setTimeout>;
+    const loop = () => {
+      setInternetBlink(prev => !prev);
+      timeout = setTimeout(loop, Math.random() * 300 + 50);
+    };
+    loop();
+    return () => clearTimeout(timeout);
+  }, [power]);
+
   useEffect(() => {
     isReadyRef.current = isReady;
   }, [isReady]);
@@ -129,22 +161,22 @@ export const VintageTV = () => {
 
           <div className="w-[220px] h-full flex flex-col items-center justify-between py-6 bg-[#2d1e14]/30 rounded-[30px] border border-white/5">
             
-            <div className="flex flex-col gap-12 items-center w-full mt-4">
-              <div className="flex flex-col items-center gap-4 z-10 w-full relative group">
+            <div className="flex flex-col gap-4 items-center w-full">
+              <div className="flex flex-col items-center gap-3 z-10 w-full group">
                 <RotaryKnob steps={12} value={channel} onChange={setChannel} type="clicky" />
-                <div className="absolute -bottom-6 w-full text-center font-mono text-[10px] text-[#8b6b55] uppercase tracking-widest">Channel</div>
+                <div className="w-full text-center font-mono text-[10px] text-[#8b6b55] uppercase tracking-widest">Channel</div>
               </div>
 
-              <div className="flex flex-col items-center gap-4 z-10 w-full relative group mt-4">
+              <div className="flex flex-col items-center gap-3 z-10 w-full group">
                 <RotaryKnob steps={100} value={volume} onChange={setVolume} type="smooth" />
-                <div className="absolute -bottom-6 w-full text-center font-mono text-[10px] text-[#8b6b55] uppercase tracking-widest">Volume</div>
+                <div className="w-full text-center font-mono text-[10px] text-[#8b6b55] uppercase tracking-widest">Volume</div>
               </div>
             </div>
 
             <div className="w-full px-6 flex flex-col gap-4">
-              <div className="h-[100px] w-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #1a110a 0px, #1a110a 2px, transparent 2px, transparent 6px)' }} />
+              <div className="h-[80px] w-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #1a110a 0px, #1a110a 2px, transparent 2px, transparent 6px)' }} />
               
-              <div className="flex justify-between items-center px-2 mt-4">
+              <div className="flex justify-between items-center px-2 mt-2">
                 <ToggleSwitch checked={power} onChange={(val) => {
                   setPower(val);
                   if (playerRef.current) {
@@ -158,10 +190,14 @@ export const VintageTV = () => {
                   }
                 }} />
                 <div className="flex gap-1.5 flex-wrap justify-end w-12">
-                   <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
-                   <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
-                   <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
-                   <div className="w-2.5 h-2.5 rounded-full bg-[#111]" />
+                   {/* Power LED */}
+                   <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${power ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-[#111]'}`} />
+                   {/* Internet/Frequency LED */}
+                   <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-75 ${internetBlink ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' : 'bg-[#111]'}`} />
+                   {/* Channel LED */}
+                   <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-100 ${channelBlink ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]' : 'bg-[#111]'}`} />
+                   {/* Volume LED */}
+                   <div className={`w-2.5 h-2.5 rounded-full transition-colors duration-100 ${volumeBlink ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-[#111]'}`} />
                 </div>
               </div>
             </div>

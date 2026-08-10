@@ -4,9 +4,11 @@
  */
 
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { VintageTV } from './components/VintageTV';
+import UiLib from './pages/UiLib';
 
-export default function App() {
+function Home() {
   return (
     <div 
       className="min-h-screen bg-[#121212] flex items-center justify-center overflow-hidden relative selection:bg-transparent"
@@ -14,5 +16,16 @@ export default function App() {
     >
       <VintageTV />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ui-lib" element={<UiLib />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
